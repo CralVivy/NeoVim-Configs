@@ -102,7 +102,6 @@ vim.api.nvim_create_autocmd('VimEnter', {
 -- Disable netrw to fully prevent it from loading
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 

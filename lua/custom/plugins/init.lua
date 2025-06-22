@@ -16,4 +16,15 @@ return {
       }
     end,
   },
+  {
+    'ThePrimeagen/vim-be-good',
+  },
+  {
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
+    config = function()
+      return require 'custom.plugins.dashboard'
+    end,
+    dependencies = { { 'nvim-tree/nvim-web-devicons' } },
+  },
 }

@@ -1,44 +1,63 @@
--- lua/custom/plugins/indentline.lua
+-- lua/custom/plugins/indent.lua
 return {
+  -- Indent guides from indent-blankline
   {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     opts = {
-      indent = {
-        char = '│',
+      indent = { char = '│', tab_char = '│' },
+      exclude = {
+        filetypes = {
+          'help',
+          'neo-tree',
+          'Trouble',
+          'dashboard',
+          'NvimTree',
+          'packer',
+          'lazy',
+          'toggleterm',
+        },
+        buftypes = { 'terminal' },
       },
       scope = {
-        enabled = true,
-        show_start = true,
-        show_end = false,
-        include = {
-          node_type = {
-            ['*'] = { 'block', 'function', 'table', 'if_statement', 'for_statement', 'while_statement' },
-          },
-        },
-        highlight = { 'IndentBlanklineContextChar' },
-      },
-      exclude = {
-        filetypes = { 'help', 'terminal', 'lazy', 'notify', 'neo-tree', 'dashboard', 'Trouble' },
-        buftypes = { 'terminal', 'nofile' },
-      },
-      whitespace = {
-        remove_blankline_trail = true,
+        enabled = false, -- We are disabling ibl scope to fully hand over to mini.indentscope
       },
     },
-    config = function(_, opts)
-      local ibl = require 'ibl'
-      local hooks = require 'ibl.hooks'
+  },
 
-      -- Highlight color for the current indent scope
-      vim.api.nvim_set_hl(0, 'IndentBlanklineContextChar', { fg = '#89b4fa', bold = true })
+  -- Add the base mini.nvim plugin
+  { 'echasnovski/mini.nvim', version = '*' },
 
-      -- Ensure color persists across colorscheme changes
-      hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-        vim.api.nvim_set_hl(0, 'IndentBlanklineContextChar', { fg = '#89b4fa', bold = true })
-      end)
-
-      ibl.setup(opts)
+  -- Mini indentscope for active indent highlighting
+  {
+    'echasnovski/mini.indentscope',
+    version = false,
+    event = 'BufReadPre',
+    opts = function()
+      local indentscope = require('mini.indentscope')
+      return {
+        symbol = '│',
+        options = { try_as_border = true },
+        draw = {
+          delay = 0,
+          animation = indentscope.gen_animation.none(),
+        },
+      }
+    end,
+    init = function()
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = {
+          'help',
+          'neo-tree',
+          'TelescopePrompt',
+          'lazy',
+          'dashboard',
+          'terminal',
+        },
+        callback = function()
+          vim.b.miniindentscope_disable = true
+        end,
+      })
     end,
   },
 }

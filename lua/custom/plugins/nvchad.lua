@@ -1,31 +1,5 @@
 -- lua/custom/plugins/nvchad.lua
 return {
-  -- =================================================================
-  -- FUNCTIONAL PLUGINS INSPIRED BY NVCHAD (These are generally safe to include)
-  -- =================================================================
-
-  -- REMOVE OR COMMENT OUT THIS ENTIRE BLOCK FOR "nvim-tree/nvim-tree.lua"
-  -- {
-  --   -- File Explorer
-  --   "nvim-tree/nvim-tree.lua",
-  --   keys = {
-  --     { "<leader>e", "<cmd>NvimTreeToggle<CR>", desc = "Toggle file explorer" },
-  --   },
-  --   opts = {
-  --     sort_by = "case_sensitive",
-  --     view = {
-  --       width = 30,
-  --       side = "left",
-  --     },
-  --     renderer = {
-  --       group_empty = true,
-  --     },
-  --     filters = {
-  --       dotfiles = true,
-  --     },
-  --   },
-  -- },
-
   {
     -- Commenting Plugin (This can remain)
     'numToStr/Comment.nvim',
