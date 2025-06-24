@@ -21,10 +21,10 @@ return {
   },
   {
     'nvimdev/dashboard-nvim',
-    event = 'VimEnter',
+    event = 'UIEnter',
     config = function()
       return require 'custom.plugins.dashboard'
     end,
-    dependencies = { { 'nvim-tree/nvim-web-devicons' } },
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
 }

@@ -1,36 +1,34 @@
 return {
-  require('dashboard').setup {
-    dashboard = {
-      width = 72,
-      sections = {
-        {
-          section = 'terminal',
-          align = 'center',
-          cmd = 'cat ' .. vim.fn.stdpath 'config' .. '/lua/custom/ui/header',
-          height = 11,
-          width = 72,
-          padding = 1,
+  'nvimdev/dashboard-nvim',
+  event = 'VimEnter',
+  dependencies = { { 'nvim-tree/nvim-web-devicons' } },
+  config = function()
+    local dashboard = require 'dashboard'
+
+    -- Read the neovim.txt file as header lines
+    local function read_header()
+      local path = vim.fn.stdpath 'config' .. '/lua/custom/ui/neovim.txt'
+      local lines = {}
+      for line in io.lines(path) do
+        table.insert(lines, line)
+      end
+      return lines
+    end
+
+    dashboard.setup {
+      theme = 'hyper',
+      config = {
+        header = read_header(),
+        shortcut = {
+          { desc = ' Update Plugins', group = '@property', action = 'Lazy update', key = 'u' },
+          { desc = ' Load Session', group = '@property', action = 'PersistenceLoadSession', key = 's' },
+          { desc = ' Load Last Session', group = '@property', action = 'PersistenceLoadLast', key = 'l' },
+          { desc = ' Find Files', group = '@property', action = 'Telescope find_files', key = 'f' },
+          { desc = ' Recent Files', group = '@property', action = 'Telescope oldfiles', key = 'r' },
+          { desc = ' Quit Neovim', group = '@property', action = 'qa', key = 'q' },
         },
-        {
-          align = 'center',
-          padding = 1,
-          text = {
-            { '  Update ', hl = 'Label' },
-            { '  Sessions ', hl = '@property' },
-            { '  Last Session ', hl = 'Number' },
-            { '  Files ', hl = 'DiagnosticInfo' },
-            { '  Recent ', hl = '@string' },
-          },
-        },
-        { section = 'startup', padding = 1 },
-        { icon = '󰏓 ', title = 'Projects', section = 'projects', indent = 2, padding = 1 },
-        { icon = ' ', title = 'Recent Files', section = 'recent_files', indent = 2, padding = 1 },
-        { text = '', action = ':Lazy update', key = 'u' },
-        { text = '', action = ':PersistenceLoadSession', key = 's' },
-        { text = '', action = ':PersistenceLoadLast', key = 'l' },
-        { text = '', action = ':Telescope find_files', key = 'f' },
-        { text = '', action = ':Telescope oldfiles', key = 'r' },
+        footer = { 'Welcome to your NeoVim workspace' },
       },
-    },
-  },
+    }
+  end,
 }

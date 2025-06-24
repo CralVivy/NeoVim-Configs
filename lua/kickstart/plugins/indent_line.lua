@@ -1,59 +1,63 @@
 -- lua/custom/plugins/indent.lua
 return {
-  -- Indent guides from indent-blankline
   {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
+    event = 'VeryLazy',
     opts = {
-      indent = { char = '│', tab_char = '│' },
+      indent = { char = '│' },
       exclude = {
-        filetypes = {
-          'help',
-          'neo-tree',
-          'Trouble',
-          'dashboard',
-          'NvimTree',
-          'packer',
-          'lazy',
-          'toggleterm',
-        },
-        buftypes = { 'terminal' },
+        filetypes = { 'dashboard' },
+        buftypes = { 'nofile', 'terminal' },
       },
-      scope = {
-        enabled = false, -- We are disabling ibl scope to fully hand over to mini.indentscope
-      },
+      scope = { enabled = false },
     },
+    init = function()
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'dashboard',
+        callback = function()
+          -- Dashboard loaded: Force disable indent guides
+          vim.b.ibl = vim.b.ibl or {}
+          vim.b.ibl.disable = true
+          vim.b.miniindentscope_disable = true
+        end,
+      })
+
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'DashboardLoaded',
+        callback = function()
+          -- Extra insurance: force-disable indent lines when dashboard is fully drawn
+          vim.b.ibl = vim.b.ibl or {}
+          vim.b.ibl.disable = true
+          vim.b.miniindentscope_disable = true
+        end,
+      })
+    end,
   },
 
-  -- Add the base mini.nvim plugin
   { 'echasnovski/mini.nvim', version = '*' },
 
-  -- Mini indentscope for active indent highlighting
   {
     'echasnovski/mini.indentscope',
-    version = false,
-    event = 'BufReadPre',
+    event = 'VeryLazy',
     opts = function()
-      local indentscope = require('mini.indentscope')
+      local scope = require 'mini.indentscope'
       return {
         symbol = '│',
         options = { try_as_border = true },
-        draw = {
-          delay = 0,
-          animation = indentscope.gen_animation.none(),
-        },
+        draw = { delay = 0, animation = scope.gen_animation.none() },
       }
     end,
     init = function()
       vim.api.nvim_create_autocmd('FileType', {
-        pattern = {
-          'help',
-          'neo-tree',
-          'TelescopePrompt',
-          'lazy',
-          'dashboard',
-          'terminal',
-        },
+        pattern = 'dashboard',
+        callback = function()
+          vim.b.miniindentscope_disable = true
+        end,
+      })
+
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'DashboardLoaded',
         callback = function()
           vim.b.miniindentscope_disable = true
         end,
