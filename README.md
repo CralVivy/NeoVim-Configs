@@ -1,3 +1,1 @@
-##Nvim-Configuration
-
-#Cralvivy's config
+### Neovim Configurations
