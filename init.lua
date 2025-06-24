@@ -438,6 +438,12 @@ require('lazy').setup({
             require('telescope.themes').get_dropdown(),
           },
         },
+        defaults = {
+          sorting_strategy = 'ascending',
+          layout_config = {
+            prompt_position = 'top',
+          },
+        },
       }
 
       -- Enable Telescope extensions if they are installed
@@ -751,7 +757,7 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   require 'kickstart.plugins.debug',
-  require 'kickstart.plugins.indent_line',
+  -- require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
@@ -762,6 +768,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   { import = 'custom.plugins' },
+  { import = 'custom.snacks' },
   --
 
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`

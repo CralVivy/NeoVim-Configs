@@ -1,43 +1,35 @@
--- lua/custom/plugins/indent.lua
 return {
   {
+    -- Indent guides
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     event = 'VeryLazy',
     opts = {
       indent = { char = '│' },
       exclude = {
-        filetypes = { 'dashboard' },
-        buftypes = { 'nofile', 'terminal' },
+        filetypes = {
+          'dashboard', 'alpha', 'starter', 'NvimTree', 'neo-tree', 'help',
+          'packer', 'lspinfo', 'checkhealth', 'man', 'gitcommit',
+          'TelescopePrompt', 'TelescopeResults'
+        },
+        buftypes = { 'nofile', 'terminal', 'quickfix', 'prompt' },
       },
       scope = { enabled = false },
     },
-    init = function()
+    config = function(_, opts)
+      require("ibl").setup(opts)
+      -- Extra protection: turn off indent guides manually for dashboard buffers
       vim.api.nvim_create_autocmd('FileType', {
-        pattern = 'dashboard',
+        pattern = { 'dashboard', 'alpha', 'starter', 'NvimTree', 'neo-tree', 'help', 'packer', 'TelescopePrompt', 'TelescopeResults' },
         callback = function()
-          -- Dashboard loaded: Force disable indent guides
-          vim.b.ibl = vim.b.ibl or {}
-          vim.b.ibl.disable = true
-          vim.b.miniindentscope_disable = true
-        end,
-      })
-
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'DashboardLoaded',
-        callback = function()
-          -- Extra insurance: force-disable indent lines when dashboard is fully drawn
-          vim.b.ibl = vim.b.ibl or {}
-          vim.b.ibl.disable = true
-          vim.b.miniindentscope_disable = true
+          vim.b.indent_blankline_enabled = false
         end,
       })
     end,
   },
 
-  { 'echasnovski/mini.nvim', version = '*' },
-
   {
+    -- Indent scope lines
     'echasnovski/mini.indentscope',
     event = 'VeryLazy',
     opts = function()
@@ -50,14 +42,7 @@ return {
     end,
     init = function()
       vim.api.nvim_create_autocmd('FileType', {
-        pattern = 'dashboard',
-        callback = function()
-          vim.b.miniindentscope_disable = true
-        end,
-      })
-
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'DashboardLoaded',
+        pattern = { 'dashboard', 'alpha', 'starter', 'NvimTree', 'neo-tree', 'help', 'packer', 'TelescopePrompt', 'TelescopeResults' },
         callback = function()
           vim.b.miniindentscope_disable = true
         end,

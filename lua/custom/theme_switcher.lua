@@ -48,9 +48,9 @@ end
 
 local function restore_ui_defaults()
   -- Reload indentline
-  require('ibl').setup {}
-  vim.api.nvim_set_hl(0, 'IndentBlanklineChar', { fg = '#3E4452' })
-  vim.api.nvim_set_hl(0, 'IndentBlanklineContextChar', { fg = '#ABB2BF' })
+  -- require('ibl').setup {}
+  -- vim.api.nvim_set_hl(0, 'IndentBlanklineChar', { fg = '#3E4452' })
+  -- vim.api.nvim_set_hl(0, 'IndentBlanklineContextChar', { fg = '#ABB2BF' })
 
   -- Reload bufferline without overwriting highlights
   local ok, bufferline = pcall(require, 'bufferline')
