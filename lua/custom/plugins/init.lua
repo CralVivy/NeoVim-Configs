@@ -25,4 +25,6 @@ return {
       require('treesitter-context').setup {}
     end,
   },
+
+  require 'custom.plugins.workspaces',
 }

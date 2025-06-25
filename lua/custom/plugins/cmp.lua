@@ -1,5 +1,3 @@
--- lua/custom/plugins/cmp.lua
-
 return {
   {
     -- Autocompletion
@@ -42,7 +40,6 @@ return {
             luasnip.lsp_expand(args.body)
           end,
         },
-        -- THE IMPORTANT PART STARTS HERE
         mapping = cmp.mapping.preset.insert {
           ['<C-n>'] = cmp.mapping.select_next_item(),
           ['<C-p>'] = cmp.mapping.select_prev_item(),
@@ -72,11 +69,14 @@ return {
             end
           end, { 'i', 's' }),
         },
-        -- THE IMPORTANT PART ENDS HERE
         sources = {
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+        },
+        window = {
+          completion = cmp.config.window.bordered(), -- Adds border to the completion window
+          documentation = cmp.config.window.bordered(), -- Adds border to the documentation window
         },
       }
     end,

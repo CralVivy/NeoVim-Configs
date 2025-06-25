@@ -4,7 +4,7 @@ return {
     'snacks.nvim',
     opts = {
       indent = {
-        enabled = true,
+        enabled = false,
         -- char = '│',
         -- only_scope = false,
         -- only_current = false,
@@ -21,7 +21,7 @@ return {
         -- priority = 1,
       },
       scope = {
-        enabled = true,
+        enabled = false,
         -- char = '│',
         -- only_current = false,
         -- underline = true,

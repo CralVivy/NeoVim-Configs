@@ -23,6 +23,8 @@ return {
       mason_tool_installer.setup {
         ensure_installed = {
           'stylua', -- For Lua formatting
+          'java-debug-adapter',
+          'java-test',
           -- Add any other common tools you need installed for formatting/linting here,
           -- e.g., 'prettier', 'eslint_d', 'flake8'
         },
@@ -43,15 +45,25 @@ return {
       local mason_lspconfig = require 'mason-lspconfig'
       -- mason_tool_installer is now already loaded and configured via its own plugin entry
       -- so we can safely require it here if needed, but for 'ensure_installed' it's already done.
-
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
+      local lsp_attach = function(client, bufnr)
+        -- Create your keybindings here...
+      end
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
       -- Define your servers list (can remain here)
       local servers = {
         html = {},
         cssls = {},
         tailwindcss = {
-          filetypes = { 'html', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'vue', 'svelte' },
+          filetypes = {
+            'html',
+            'javascript',
+            'javascriptreact',
+            'typescript',
+            'typescriptreact',
+            'vue',
+            'svelte',
+          },
         },
         tsserver = {},
         lua_ls = {
