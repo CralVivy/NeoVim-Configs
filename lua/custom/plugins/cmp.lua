@@ -28,6 +28,9 @@ return {
       -- Adds file path completion capabilities
       'hrsh7th/cmp-path',
     },
+    -- opts = function(_, opts)
+    --   table.insert(opts.sources, 1, { name = 'copilot', group_index = 1, priority = 100 })
+    -- end,
     config = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
@@ -70,13 +73,20 @@ return {
           end, { 'i', 's' }),
         },
         sources = {
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-          { name = 'path' },
+          { name = 'copilot', group_index = 2 },
+          { name = 'nvim_lsp', group_index = 2 },
+          { name = 'luasnip', group_index = 2 },
+          { name = 'path', group_index = 2 },
         },
         window = {
-          completion = cmp.config.window.bordered(), -- Adds border to the completion window
-          documentation = cmp.config.window.bordered(), -- Adds border to the documentation window
+          completion = cmp.config.window.bordered {
+            border = 'rounded', -- You can also try 'single', 'double', etc.
+            winhighlight = 'Normal:Normal,FloatBorder:Normal', -- Adjust as needed
+          },
+          documentation = cmp.config.window.bordered {
+            border = 'rounded',
+            winhighlight = 'Normal:Normal,FloatBorder:Normal', -- Adjust as needed
+          },
         },
       }
     end,

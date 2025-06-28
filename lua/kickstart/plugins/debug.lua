@@ -100,14 +100,13 @@ return {
       delve = { detached = vim.fn.has 'win32' == 0 },
     }
 
-    require('dap-python').setup {
-      python_path = function()
-        return require('mason-core.path').bin_dir .. '/debugpy/venv/bin/python'
-      end,
-    }
+    -- CORRECTED: Pass the path directly as a string
+    require('dap-python').setup(vim.fn.stdpath 'data' .. '/mason/packages/debugpy/venv/bin/python')
 
+    -- CORRECTED: Provide the required configuration fields
     require('dap-vscode-js').setup {
       debugger_path = vim.fn.stdpath 'data' .. '/mason/packages/js-debug-adapter',
+      adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge' },
     }
 
     -- Java Adapter (assumes java-debug-adapter installed)

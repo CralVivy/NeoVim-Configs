@@ -34,6 +34,7 @@ local themes = {
   'no-clown-fiesta',
   'visual_studio_code',
   'tender',
+  'night-owl',
 }
 
 local function save_theme(theme)

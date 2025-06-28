@@ -17,8 +17,11 @@ return {
       hijack_netrw_behavior = 'open_current',
       follow_current_file = {
         enabled = true,
-        leave_unmodified = true,
+        leave_unmodified = false,
+        leave_dirs_open = true,
+        use_libuv_file_watcher = true,
       },
+      sync_with_buffer = true,
       resolve_symlinks = true,
       hide_dotfiles = false, -- These are optional but fine to keep
       hide_hidden = false, -- These are optional but fine to keep

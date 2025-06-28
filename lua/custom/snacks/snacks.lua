@@ -8,17 +8,38 @@ return {
       -- your configuration comes here
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
-      bigfile = { enabled = true },
-      dashboard = { enabled = true },
-      explorer = { enabled = false },
-      input = { enabled = true },
-      picker = { enabled = true },
-      notifier = { enabled = true },
-      quickfile = { enabled = true },
-      scope = { enabled = false },
-      scroll = { enabled = false },
-      statuscolumn = { enabled = true },
-      words = { enabled = true },
+      bigfile = {
+        enabled = true,
+      },
+      dashboard = {
+        enabled = true,
+      },
+      explorer = {
+        enabled = false,
+      },
+      input = {
+        enabled = true,
+      },
+      notifier = {
+        enabled = true,
+      },
+      quickfile = {
+        enabled = true,
+      },
+      scroll = {
+        enabled = false,
+      },
+      statuscolumn = {
+        enabled = true,
+      },
+      words = {
+        enabled = true,
+      },
+      animate = {
+        enabled = true,
+        fps = 240,
+        duration = 50,
+      },
     },
   },
 }

@@ -44,12 +44,6 @@ return {
         --   arrow = '>',
         -- },
       },
-      animate = {
-        enabled = false,
-        -- style = 'out',
-        -- easing = 'linear',
-        -- duration = { step = 0, total = 0 },
-      },
     },
   },
 }

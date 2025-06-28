@@ -2,7 +2,7 @@
 -- It allows quick switching between project directories and integrates with Telescope.
 
 return {
-  'natecraddock/workspaces.nvim', -- The plugin's GitHub repository
+  'natecraddoock/workspaces.nvim', -- The plugin's GitHub repository
   event = 'VeryLazy', -- Load the plugin relatively late to avoid impacting startup
   dependencies = {
     'nvim-telescope/telescope.nvim', -- Required for Telescope integration
