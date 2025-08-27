@@ -9,7 +9,7 @@ return {
     indicator = { icon = '▎', style = 'icon' },
     buffer_close_icon = '󰅖',
     modified_icon = '●',
-    separator_style = 'slant', -- Rounded separators
+    separator_style = 'slant',
     always_show_bufferline = true,
     show_buffer_icons = true,
     show_close_icon = false,

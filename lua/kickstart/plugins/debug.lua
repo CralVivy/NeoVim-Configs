@@ -55,7 +55,7 @@ return {
       desc = 'Debug: See last session result.',
     },
     {
-      '<leader>b',
+      '<leader>bb',
       function()
         require('dap').toggle_breakpoint()
       end,
