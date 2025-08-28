@@ -8,7 +8,6 @@ return {
     'leoluz/nvim-dap-go',
     'mfussenegger/nvim-dap-python',
     'mxsdev/nvim-dap-vscode-js',
-    -- Add any other dap-related dependencies here if needed, e.g., for C/C++ (nvim-dap-cxx)
   },
   keys = {
     {
@@ -52,7 +51,7 @@ return {
       function()
         require('dapui').toggle()
       end,
-      desc = 'Debug: See last session result.',
+      desc = 'Debug: Toggle UI',
     },
     {
       '<leader>bb',
@@ -66,59 +65,56 @@ return {
       function()
         require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
       end,
-      desc = 'Debug: Set Breakpoint',
+      desc = 'Debug: Conditional Breakpoint',
     },
   },
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
 
-    -- Setup mason-nvim-dap for automatic debugger installation
+    -- Mason-DAP setup
     require('mason-nvim-dap').setup {
       automatic_installation = true,
       handlers = {},
       ensure_installed = {
-        'delve', -- Go debugger
-        'codelldb', -- C/C++/Rust debugger
-        'js-debug-adapter', -- JavaScript/TypeScript debugger
-        'debugpy', -- Python debugger
-        'netcoredbg', -- .NET Core debugger
-        'php-debug-adapter', -- PHP debugger
-        'rdbg', -- Ruby debugger
-        'java-debug-adapter', -- Java debugger
-        -- Add other debuggers as needed
+        'delve', -- Go
+        'codelldb', -- C/C++/Rust
+        'js-debug-adapter', -- JavaScript/TypeScript
+        'debugpy', -- Python
+        'netcoredbg', -- .NET
+        'php-debug-adapter', -- PHP
+        'rdbg', -- Ruby
+        'java-debug-adapter', -- Java
       },
     }
 
-    -- Setup dapui for the debug user interface
+    -- DAP UI
     dapui.setup()
 
-    -- Define signs for breakpoints and stopped lines
-    vim.fn.sign_define('DapBreakpoint', { text = '•', texthl = 'DapBreakpointRed' })
+    -- Signs
+    vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DapBreakpointRed' })
     vim.fn.sign_define('DapStopped', { text = '▶', texthl = 'DapStoppedGreen' })
 
-    -- Automatically open/close dapui on debug events
+    -- Auto open/close UI
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
-    -- Go Debugger Setup
+    -- Go
     require('dap-go').setup {
       delve = { detached = vim.fn.has 'win32' == 0 },
     }
 
-    -- Python Debugger Setup (using debugpy installed by Mason)
-    -- This explicitly sets the path to debugpy's python executable
+    -- Python
     require('dap-python').setup(vim.fn.stdpath 'data' .. '/mason/packages/debugpy/venv/bin/python')
 
-    -- JavaScript/TypeScript Debugger Setup (using js-debug-adapter installed by Mason)
+    -- JavaScript/TypeScript
     require('dap-vscode-js').setup {
       debugger_path = vim.fn.stdpath 'data' .. '/mason/packages/js-debug-adapter',
       adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge' },
     }
 
-    -- Java Debugger Adapter Definition (connects to java-debug-adapter)
-    -- This assumes 'java-debug-adapter' is installed via Mason
+    -- Java
     dap.adapters.java = function(callback)
       callback {
         type = 'server',
@@ -126,10 +122,7 @@ return {
         port = '5005',
       }
     end
-
-    -- Java Debug Configurations
     dap.configurations.java = {
-      -- Attach to a running Java process
       {
         type = 'java',
         request = 'attach',
@@ -137,46 +130,32 @@ return {
         hostName = '127.0.0.1',
         port = 5005,
       },
-      -- Launch a Java application
       {
-        -- You need to extend the classPath to list your dependencies.
-        -- `nvim-jdtls` would automatically add the `classPaths` property if it is missing
-        classPaths = {},
-
-        -- If using multi-module projects, remove otherwise.
-        -- **IMPORTANT**: Replace 'yourProjectName' with the actual name of your project or module.
-        projectName = 'yourProjectName',
-
-        -- Path to your Java executable (e.g., from SDKMAN or system install)
-        -- **IMPORTANT**: Adjust this path to your specific Java installation.
-        javaExec = '~/.sdkman/candidates/java/21.0.2-open',
-
-        -- The fully qualified name of your main class (e.g., 'com.example.MainClass')
-        -- **IMPORTANT**: Replace 'your.package.name.MainClassName' with your actual main class.
-        mainClass = 'your.package.name.MainClassName',
-
-        -- If using the JDK9+ module system, this needs to be extended
-        -- `nvim-jdtls` would automatically populate this property
-        modulePaths = {},
-        name = 'Launch YourClassName',
-        request = 'launch',
+        name = 'Launch Java App',
         type = 'java',
+        request = 'launch',
+        mainClass = 'your.package.MainClass', -- CHANGE this
+        projectName = 'yourProjectName', -- CHANGE this
+        javaExec = '~/.sdkman/candidates/java/current/bin/java', -- adjust as needed
+        classPaths = {},
+        modulePaths = {},
       },
     }
 
-    -- You can add configurations for other languages here as well
-    -- e.g., for C/C++ with CodeLLDB
-    -- dap.configurations.cpp = {
-    --   {
-    --     name = "Launch file",
-    --     type = "codelldb",
-    --     request = "launch",
-    --     program = function()
-    --       return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-    --     end,
-    --     cwd = '${workspaceFolder}',
-    --     stopOnEntry = true,
-    --   },
-    -- }
+    -- C, C++, Rust (CodeLLDB)
+    dap.configurations.cpp = {
+      {
+        name = 'Launch file',
+        type = 'codelldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+      },
+    }
+    dap.configurations.c = dap.configurations.cpp
+    dap.configurations.rust = dap.configurations.cpp
   end,
 }
