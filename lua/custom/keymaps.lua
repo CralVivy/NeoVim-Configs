@@ -18,9 +18,9 @@ map('n', '<leader>e', '<cmd>Neotree toggle<CR>', { desc = 'Toggle Neo-tree', sil
 
 -- Require the theme switcher
 -- Map <leader>th to open the theme picker
-vim.keymap.set('n', '<leader>th', function()
-  require('custom.theme_switcher').pick_theme()
-end, { desc = 'Pick Theme', silent = true })
+-- vim.keymap.set('n', '<leader>th', function()
+--   require('custom.theme_switcher').pick_theme()
+-- end, { desc = 'Pick Theme', silent = true })
 
 vim.keymap.set('n', '<leader>aa', '<Cmd>CodeCompanionChat<CR>', { desc = 'Toggle CodeCompanion Chat' })
 vim.keymap.set('n', '<leader>ao', '<Cmd>CodeCompanionActions<CR>', { desc = 'Open CodeCompanion Actions' })

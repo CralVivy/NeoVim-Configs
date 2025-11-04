@@ -60,6 +60,9 @@ local config = {
   init_options = {
     bundles = {},
   },
+  dap = {
+    config = true, -- Enables JDTLS to register its DAP adapter
+  },
 }
 require('jdtls').start_or_attach(config)
 

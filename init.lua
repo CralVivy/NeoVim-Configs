@@ -92,11 +92,11 @@ vim.g.maplocalleader = ' '
 vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
-vim.api.nvim_create_autocmd('VimEnter', {
-  callback = function()
-    require('custom.theme_switcher').load_last_theme()
-  end,
-})
+-- vim.api.nvim_create_autocmd('VimEnter', {
+--   callback = function()
+--     require('custom.theme_switcher').load_last_theme()
+--   end,
+-- })
 
 -- Netrw configuration to ensure files open in current window and netrw closes
 -- Disable netrw to fully prevent it from loading
