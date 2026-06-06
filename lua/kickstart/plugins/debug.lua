@@ -1,31 +1,16 @@
--- debug.lua
---
--- Shows how to use the DAP plugin to debug your code.
---
--- Primarily focused on configuring the debugger for Go, but can
--- be extended to other languages as well. That's why it's called
--- kickstart.nvim and not kitchen-sink.nvim ;)
-
 return {
-  -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
-  -- NOTE: And you can specify dependencies as well
   dependencies = {
-    -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
-
-    -- Required dependency for nvim-dap-ui
     'nvim-neotest/nvim-nio',
-
-    -- Installs the debug adapters for you
     'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-
-    -- Add your own debuggers here
     'leoluz/nvim-dap-go',
+    'mfussenegger/nvim-dap-python',
+    'mxsdev/nvim-dap-vscode-js',
+    -- 'java-debug-adapter' is explicitly managed by JDTLS, so it's removed here
   },
   keys = {
-    -- Basic debugging keymaps, feel free to change to your liking!
     {
       '<F5>',
       function()
@@ -55,7 +40,22 @@ return {
       desc = 'Debug: Step Out',
     },
     {
-      '<leader>b',
+      '<F6>',
+      function()
+        require('dap').terminate()
+        require('dapui').close()
+      end,
+      desc = 'Debug: Stop',
+    },
+    {
+      '<F7>',
+      function()
+        require('dapui').toggle()
+      end,
+      desc = 'Debug: Toggle UI',
+    },
+    {
+      '<leader>bb',
       function()
         require('dap').toggle_breakpoint()
       end,
@@ -66,83 +66,151 @@ return {
       function()
         require('dap').set_breakpoint(vim.fn.input 'Breakpoint condition: ')
       end,
-      desc = 'Debug: Set Breakpoint',
-    },
-    -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
-    {
-      '<F7>',
-      function()
-        require('dapui').toggle()
-      end,
-      desc = 'Debug: See last session result.',
+      desc = 'Debug: Conditional Breakpoint',
     },
   },
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
 
+    -- Mason-DAP setup
     require('mason-nvim-dap').setup {
-      -- Makes a best effort to setup the various debuggers with
-      -- reasonable debug configurations
       automatic_installation = true,
-
-      -- You can provide additional configuration to the handlers,
-      -- see mason-nvim-dap README for more information
-      handlers = {},
-
-      -- You'll need to check that you have the required things installed
-      -- online, please don't ask me how to install them :)
+      handlers = {
+        -- This default_setup handles all Mason-installed DAP servers for which it has defaults.
+        -- Java is *not* handled here, as JDTLS will provide it.
+        function(config)
+          require('mason-nvim-dap').default_setup(config)
+        end,
+      },
       ensure_installed = {
-        -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
+        'delve', -- Go debugger
+        'codelldb', -- C/C++/Rust debugger
+        'js-debug-adapter', -- JavaScript/TypeScript debugger
+        'debugpy', -- Python debugger
+        'netcoredbg', -- .NET debugger
+        'php-debug-adapter', -- PHP debugger
+        'rdbg', -- Ruby debugger
+        -- 'java-debug-adapter' is removed from here. JDTLS is responsible for it.
       },
     }
 
-    -- Dap UI setup
-    -- For more information, see |:help nvim-dap-ui|
-    dapui.setup {
-      -- Set icons to characters that are more likely to work in every terminal.
-      --    Feel free to remove or use ones that you like more! :)
-      --    Don't feel like these are good choices.
-      icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
-      controls = {
-        icons = {
-          pause = '⏸',
-          play = '▶',
-          step_into = '⏎',
-          step_over = '⏭',
-          step_out = '⏮',
-          step_back = 'b',
-          run_last = '▶▶',
-          terminate = '⏹',
-          disconnect = '⏏',
-        },
-      },
-    }
+    -- DAP UI setup
+    dapui.setup()
 
-    -- Change breakpoint icons
-    -- vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-    -- vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-    -- local breakpoint_icons = vim.g.have_nerd_font
-    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
-    --   or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
-    -- for type, icon in pairs(breakpoint_icons) do
-    --   local tp = 'Dap' .. type
-    --   local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
-    --   vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
-    -- end
+    -- Sign definitions for breakpoints in the Neovim gutter
+    vim.fn.sign_define('DapBreakpoint', { text = '●', texthl = 'DapBreakpointRed', numhl = '' })
+    vim.fn.sign_define('DapBreakpointCondition', { text = '●', texthl = 'DapBreakpointRed', numhl = '' })
+    vim.fn.sign_define('DapLogPoint', { text = '◆', texthl = 'DapBreakpointGreen', numhl = '' })
+    vim.fn.sign_define('DapStopped', { text = '▶', texthl = 'DapStoppedGreen', numhl = '' })
 
+    -- Auto open/close DAP UI based on debug events
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
-    -- Install golang specific config
+    -- Go language specific setup
     require('dap-go').setup {
-      delve = {
-        -- On Windows delve must be run attached or it crashes.
-        -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
-        detached = vim.fn.has 'win32' == 0,
+      delve = { detached = vim.fn.has 'win32' == 0 }, -- Use detached mode for Windows
+    }
+
+    -- Python language specific setup
+    require('dap-python').setup(vim.fn.stdpath 'data' .. '/mason/packages/debugpy/venv/bin/python')
+
+    -- JavaScript/TypeScript language specific setup
+    require('dap-vscode-js').setup {
+      debugger_path = vim.fn.stdpath 'data' .. '/mason/packages/js-debug-adapter',
+      adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge' },
+    }
+
+    -- Java configurations (these configurations will now use the adapter defined by JDTLS)
+    local get_java_main_class = function()
+      local bufnr = vim.api.nvim_get_current_buf()
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+      for _, line in ipairs(lines) do
+        if line:find 'public%s+static%s+void%s+main' then
+          local package_name = ''
+          for _, pkg_line in ipairs(lines) do
+            local found_pkg = pkg_line:match '^%s*package%s+([a-zA-Z0-9_.]+);'
+            if found_pkg then
+              package_name = found_pkg .. '.'
+              break
+            end
+          end
+          -- Corrected function name
+          local file_name = vim.fn.fnamemodify(vim.fn.expand '%', ':t:r')
+          return package_name .. file_name
+        end
+      end
+      return vim.fn.input 'Enter Main Class (e.g., com.example.Main): '
+    end
+
+    local get_java_project_name = function()
+      -- Corrected function name
+      local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+      return vim.fn.input('Enter Project Name: ', project_name)
+    end
+
+    dap.configurations.java = {
+      {
+        type = 'java',
+        request = 'attach',
+        name = 'Debug (Attach) - Remote',
+        hostName = '127.0.0.1',
+        port = 5005,
+      },
+      {
+        name = 'Launch Java App',
+        type = 'java', -- This 'type' will now be fulfilled by JDTLS's DAP registration
+        request = 'launch',
+        mainClass = get_java_main_class,
+        projectName = get_java_project_name,
+        javaExec = '~/.sdkman/candidates/java/current/bin/java', -- Path to your Java executable
+        classPaths = {},
+        modulePaths = {},
+        externalConsole = true,
       },
     }
+
+    -- C, C++, Rust (CodeLLDB) configurations
+    dap.configurations.cpp = {
+      {
+        name = 'Launch file (and compile)',
+        type = 'codelldb',
+        request = 'launch',
+        program = function()
+          local file = vim.fn.expand '%:p'
+          -- Corrected function name
+          local output = '/tmp/' .. vim.fn.fnamemodify(file, ':t:r') .. '.out'
+          local compiler = vim.fn.input('Compiler (e.g., g++): ', 'g++')
+
+          local cmd = string.format('%s -g -o %s %s', compiler, output, file)
+
+          vim.notify('Compiling with: ' .. cmd, vim.log.levels.INFO)
+          local success = vim.fn.system(cmd)
+
+          if vim.v.shell_error ~= 0 then
+            vim.notify('Compilation failed with errors: ' .. success, vim.log.levels.ERROR)
+            return nil
+          end
+
+          vim.notify('Compilation successful!', vim.log.levels.INFO)
+          return output
+        end,
+        args = function()
+          local args_str = vim.fn.input 'Enter command-line arguments (space-separated): '
+          local args = {}
+          for arg in args_str:gmatch '%S+' do
+            table.insert(args, arg)
+          end
+          return args
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        externalConsole = true,
+      },
+    }
+    dap.configurations.c = dap.configurations.cpp
+    dap.configurations.rust = dap.configurations.cpp
   end,
 }
