@@ -1,77 +1,92 @@
-# CedarVim
+<div align="center">
 
-**A high-performance, modular Neovim configuration evolved from Kickstart.nvim.**
+# 🌲 CedarVim
 
-CedarVim is engineered for speed and stability, utilizing a "Unification" strategy to reduce cognitive load and system overhead. By replacing legacy Lua implementations with Rust-powered alternatives and maintaining a strict separation of concerns, it provides a lean, professional development environment.
+**A high-performance, modular Neovim configuration engineered for stability and speed.**
+
+[![Neovim](https://img.shields.io/badge/Neovim-v0.10+-blue?logo=neovim&logoColor=white)](https://neovim.io)
+[![Language](https://img.shields.io/badge/Language-Lua-blue?logo=lua)](https://www.lua.org)
+[![Engine](https://img.shields.io/badge/Engine-Rust--Powered-orange?logo=rust)](https://www.rust-lang.org)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE.md)
 
 ---
 
-## 🛠 Technical Stack
+**Modular • Unified • Low-Latency • Rigorous**
+
+</div>
+
+## 📖 Overview
+
+CedarVim is an evolution of the Kickstart.nvim philosophy, optimized for developers who require a professional-grade environment without the bloat. It implements a **Unification Strategy**, consolidating redundant plugins into single, high-performance engines to reduce cognitive load and system memory overhead.
+
+---
+
+## 🛠 Technical Capabilities
 
 ### ⚡ Performance & Navigation
-| Component | Tool | Purpose |
+| Feature | Implementation | Technical Advantage |
 | :--- | :--- | :--- |
-| **Fuzzy Finder** | `snacks.nvim` | Unified engine for files, grep, buffers, and LSP navigation. |
-| **Completion** | `blink.cmp` | Rust-based completion engine for near-zero latency. |
-| **Workspaces** | `workspaces.nvim` | Rapid project switching and directory management. |
+| **Unified Picking** | `snacks.nvim` | Single Rust-powered engine for files, grep, and LSP. |
+| **Instant Completion** | `blink.cmp` | Asynchronous Rust completion for sub-millisecond latency. |
+| **Project Switching** | `workspaces.nvim` | Rapid directory context switching for multi-repo workflows. |
 
 ### 🧠 Intelligence & LSP
-- **LSP Management**: `mason.nvim` & `nvim-lspconfig` for standardized server orchestration.
-- **AI Integration**: `CodeCompanion` for LLM-based chat and inline refactoring.
-- **Copilot**: Integrated via `blink.cmp` for high-performance ghost-text suggestions.
-- **Java Specialization**: Deep integration with `jdtls` for enterprise Java development.
-- **Debugging**: Full DAP support for Java, Go, Python, Rust, and C/C++.
+- **Orchestration**: `mason.nvim` & `nvim-lspconfig` for standardized server management.
+- **AI Pairing**: `CodeCompanion` for LLM-integrated chat and inline refactoring.
+- **Copilot**: Native `blink.cmp` integration for high-performance ghost-text.
+- **Java Stack**: Specialized `jdtls` configuration for enterprise-scale Java development.
+- **Debugging**: Full DAP implementation for Java, Go, Python, Rust, and C/C++.
 
 ### 🎨 Interface & UI
-- **Theme System**: Custom persistence layer with `pywal.nvim` for system-wide color harmony.
-- **Visual Scope**: `indent-blankline.nvim` for structural indentation highlighting.
-- **Status & UI**: `lualine.nvim` and `bufferline.nvim` for a clean, informative workspace.
+- **Dynamic Theme**: `pywal.nvim` integration for system-wide color synchronization.
+- **Visual Scope**: `indent-blankline.nvim` for precise indentation and scope tracking.
+- **Workspace UI**: `lualine.nvim` and `bufferline.nvim` for a minimal, information-dense interface.
 
 ---
 
-## 📂 Configuration Structure
+## 📂 Architecture
 
-The configuration follows a modular architecture to ensure that the core boot process remains lightweight while allowing for extensive customization.
+The configuration utilizes a strict separation of concerns to ensure stability and ease of maintenance.
 
 ```text
 .
-├── init.lua                # Entry point & plugin registry
+├── init.lua                # Boot sequence, options, and plugin registry
 ├── lua/
-│   ├── custom/             # User-specific extensions
-│   │   ├── configs/        # Plugin-specific configuration
+│   ├── custom/             # The core logic layer
+│   │   ├── configs/        # Granular plugin settings
 │   │   ├── plugins/        # Modular plugin specifications
-│   │   ├── snacks/         # Unified picker logic
-│   │   ├── ui/             # UI assets
+│   │   ├── snacks/         # Unified picker configurations
+│   │   ├── ui/             # UI components and assets
 │   │   └── utils/          # Shared helper functions
-│   └── kickstart/          # Core base components
-└── doc/                    # Technical documentation (ignored by git)
+│   └── kickstart/          # Base foundational components
+└── doc/                    # Technical reference (Git-ignored)
 ```
 
 ---
 
 ## 📦 Installation
 
-### Requirements
+### Prerequisites
 - **Neovim**: `v0.10.0+`
 - **Font**: [Nerd Font](https://www.nerdfonts.com/)
-- **CLI Tools**: `ripgrep`, `fd`, `npm`, `cargo` (optional)
+- **CLI Tools**: `ripgrep`, `fd`, `npm`
 
 ### Setup
 1. **Clone the repository**:
    ```bash
    git clone <your-repo-url> ~/.config/nvim
    ```
-2. **Launch Neovim**:
-   `lazy.nvim` will automatically install all plugins on the first run.
-3. **Update**:
-   Run `:Lazy update` to ensure all plugins are current.
+2. **Initialization**:
+   Launch Neovim. `lazy.nvim` will automatically bootstrap and install all dependencies.
+3. **Sync**:
+   Run `:Lazy update` to synchronize the latest plugin versions.
 
 ---
 
 ## 📖 Documentation
 
-Detailed references are maintained in the `doc/` directory:
+Detailed technical references are maintained in the `doc/` directory:
 
-- **[Keybindings Guide](doc/keybinds.md)**: Complete list of all shortcuts and mappings.
+- **[Keybindings Guide](doc/keybinds.md)**: Comprehensive mapping and shortcut reference.
 - **[Technical Audit](doc/AUDIT-Rigorous.md)**: Deep-dive analysis of the system architecture.
-- **[Implementation Walkthrough](doc/walkthrough.md)**: History of optimizations and changes.
+- **[Implementation Walkthrough](doc/walkthrough.md)**: History of optimizations and migrations.
