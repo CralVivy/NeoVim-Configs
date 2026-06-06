@@ -1,1 +1,4 @@
-return 'pywal'
+return {
+  mode = 'dynamic',
+  theme = 'pywal'
+}

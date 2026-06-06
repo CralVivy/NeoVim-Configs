@@ -49,7 +49,8 @@ return {
     priority = 1000,
     config = function()
       require('pywal').setup()
-      vim.cmd 'colorscheme pywal'
+      -- Removed: vim.cmd 'colorscheme pywal'
+      -- Theme application is now handled by custom.theme_switcher
     end,
   },
 }

@@ -53,13 +53,13 @@ map('n', '<leader>e', '<cmd>Neotree toggle<CR>', { desc = 'Toggle Neo-tree', sil
 -- -- Toggle Neo-tree
 -- map('n', '<leader>e', '<cmd>Neotree toggle<CR>', { desc = 'Toggle Neo-tree', silent = true })
 --
--- -- Require the theme switcher
--- -- Map <leader>th to open the theme picker
--- -- vim.keymap.set('n', '<leader>th', function()
--- --   require('custom.theme_switcher').pick_theme()
--- -- end, { desc = 'Pick Theme', silent = true })
---
--- vim.keymap.set('n', '<leader>aa', '<Cmd>CodeCompanionChat<CR>', { desc = 'Toggle CodeCompanion Chat' })
--- vim.keymap.set('n', '<leader>ao', '<Cmd>CodeCompanionActions<CR>', { desc = 'Open CodeCompanion Actions' })
+-- Require the theme switcher
+-- Map <leader>th to open the theme picker
+vim.keymap.set('n', '<leader>th', function()
+  require('custom.theme_switcher').pick_theme()
+end, { desc = 'Pick Theme', silent = true })
+
+vim.keymap.set('n', '<leader>aa', '<Cmd>CodeCompanionChat<CR>', { desc = 'Toggle CodeCompanion Chat' })
+vim.keymap.set('n', '<leader>ao', '<Cmd>CodeCompanionActions<CR>', { desc = 'Open CodeCompanion Actions' })
 -- -- vim.keymap.set('n', '<leader>ar', '<Cmd>CodeCompanionReview<CR>', {desc = 'Review with CodeCompanion'})
 -- -- vim.keymap.set('n', '<leader>at', '<Cmd>CodeCompanionTest<CR>', {desc = 'Test with CodeCompanion'})

@@ -3,7 +3,6 @@ local m = {}
 local theme_file = vim.fn.stdpath 'config' .. '/lua/custom/current_theme.lua'
 
 local themes = {
-  -- Your theme list
   'catppuccin',
   'tokyonight',
   'onedark',
@@ -37,10 +36,11 @@ local themes = {
   'night-owl',
 }
 
-local function save_theme(theme)
+local function save_theme(mode, theme)
   local file = io.open(theme_file, 'w')
   if file then
-    file:write('return "' .. theme .. '"\n')
+    local content = string.format('return { mode = "%s", theme = "%s" }\n', mode, theme)
+    file:write(content)
     file:close()
   else
     vim.notify('Error saving theme!', vim.log.levels.ERROR)
@@ -48,12 +48,6 @@ local function save_theme(theme)
 end
 
 local function restore_ui_defaults()
-  -- Reload indentline
-  -- require('ibl').setup {}
-  -- vim.api.nvim_set_hl(0, 'IndentBlanklineChar', { fg = '#3E4452' })
-  -- vim.api.nvim_set_hl(0, 'IndentBlanklineContextChar', { fg = '#ABB2BF' })
-
-  -- Reload bufferline without overwriting highlights
   local ok, bufferline = pcall(require, 'bufferline')
   if ok then
     package.loaded['custom.configs.bufferline'] = nil
@@ -63,25 +57,54 @@ local function restore_ui_defaults()
 end
 
 function m.load_last_theme()
-  local ok, last_theme = pcall(dofile, theme_file)
-  if ok and last_theme then
-    vim.cmd('colorscheme ' .. last_theme)
+  local ok, data = pcall(dofile, theme_file)
+  if not ok then
+    vim.cmd 'colorscheme default'
+    return
+  end
+
+  local mode, theme
+  if type(data) == 'table' then
+    mode = data.mode
+    theme = data.theme
+  else
+    mode = 'static'
+    theme = data
+  end
+
+  if mode == 'dynamic' then
+    vim.cmd 'colorscheme pywal'
+  elseif theme and theme ~= '' then
+    vim.cmd 'colorscheme ' .. theme
   else
     vim.cmd 'colorscheme default'
   end
+  
   restore_ui_defaults()
 end
 
 m.load_theme = function(theme)
-  vim.cmd('colorscheme ' .. theme)
-  vim.notify('Loaded theme: ' .. theme, vim.log.levels.INFO, { title = 'Theme Switcher' })
-  save_theme(theme)
+  local mode = 'static'
+  if theme == '🌈 Pywal (Dynamic)' then
+    mode = 'dynamic'
+    vim.cmd 'colorscheme pywal'
+  else
+    vim.cmd 'colorscheme ' .. theme
+  end
+
+  vim.notify('Loaded ' .. mode .. ' theme: ' .. theme, vim.log.levels.INFO, { title = 'Theme Switcher' })
+  save_theme(mode, theme)
   restore_ui_defaults()
 end
 
 m.pick_theme = function()
-  require('snacks').picker.select(themes, {
-    prompt = 'Select Theme',
+  local options = { '🌈 Pywal (Dynamic)' }
+  for _, v in ipairs(themes) do
+    table.insert(options, v)
+  end
+
+  require('snacks').picker.select(options, {
+    prompt = 'Select Theme Mode',
     confirm = function(item)
       m.load_theme(item)
     end,
