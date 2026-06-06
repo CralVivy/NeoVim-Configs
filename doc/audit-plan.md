@@ -24,7 +24,6 @@ To ensure the audit does not degrade the current setup or break the UI, the foll
 - [ ] **UI Regression Check**: Any change to UI-related plugins (`bufferline`, `neo-tree`, `snacks.nvim`) must be evaluated against the current visual setup to prevent "UI drift" or breakage of custom styling.
 - [ ] **User-Workflow Simulation**: Simulate common workflows (e.g., "Open file $\rightarrow$ Search symbol $\rightarrow$ Edit $\rightarrow$ Switch Buffer") to ensure the change doesn't introduce friction or break existing muscle memory.
 
-
 ## 2. Global Standards & 2026 Best Practices
 Every audited file must be checked against these "Golden Rules":
 

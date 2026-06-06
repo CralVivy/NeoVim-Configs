@@ -5,7 +5,7 @@ return {
   'natecraddock/workspaces.nvim', -- The plugin's GitHub repository
   event = 'VeryLazy', -- Load the plugin relatively late to avoid impacting startup
   dependencies = {
-    'nvim-telescope/telescope.nvim', -- Required for Telescope integration
+    'nvim-lua/plenary.nvim',
   },
 
   -- Options for workspaces.nvim
@@ -30,10 +30,10 @@ return {
   config = function(_, opts)
     require('workspaces').setup(opts)
 
-    -- Keymap for opening the workspace picker via Telescope.
+    -- Keymap for opening the workspace picker.
     -- Using <leader>ww for "[W]orkspaces [W]orkspace Picker".
     vim.keymap.set('n', '<leader>ww', function()
-      require('telescope').extensions.workspaces.workspaces {}
+      vim.cmd('WorkspacesOpen')
     end, { desc = '[W]orkspaces [W]orkspace Picker' })
   end,
 }

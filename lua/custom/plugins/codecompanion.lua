@@ -3,7 +3,6 @@ return {
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-treesitter/nvim-treesitter',
-    'nvim-telescope/telescope.nvim',
   },
   event = 'VeryLazy',
   cmd = { 'CodeCompanion', 'CodeCompanionChat', 'CodeCompanionSave', 'CodeCompanionLoad', 'CodeCompanionDelete' },
@@ -68,44 +67,32 @@ return {
 
     -- LOAD CHAT
     vim.api.nvim_create_user_command('CodeCompanionLoad', function()
-      local telescope = require 'telescope.builtin'
-      telescope.find_files {
-        prompt_title = '📂 Load CodeCompanion Chat',
+      require('snacks').picker.files {
+        prompt = '📂 Load CodeCompanion Chat',
         cwd = vim.fn.stdpath 'data' .. '/cc_saves',
-        attach_mappings = function(_, map)
-          map('i', '<CR>', function(prompt_bufnr)
-            local entry = require('telescope.actions.state').get_selected_entry()
-            require('telescope.actions').close(prompt_bufnr)
-            vim.cmd('edit ' .. entry.path)
-          end)
-          return true
+        confirm = function(item)
+          vim.cmd('edit ' .. item.path)
         end,
       }
     end, {})
 
     -- DELETE CHAT
     vim.api.nvim_create_user_command('CodeCompanionDelete', function()
-      local telescope = require 'telescope.builtin'
       local Path = require 'plenary.path'
       local save_dir = vim.fn.stdpath 'data' .. '/cc_saves'
 
-      telescope.find_files {
-        prompt_title = '🗑️ Delete CodeCompanion Chat',
+      require('snacks').picker.files {
+        prompt = '🗑️ Delete CodeCompanion Chat',
         cwd = save_dir,
-        attach_mappings = function(_, map)
-          map('i', '<CR>', function(prompt_bufnr)
-            local entry = require('telescope.actions.state').get_selected_entry()
-            require('telescope.actions').close(prompt_bufnr)
-            local full_path = save_dir .. '/' .. entry.value
-            local path = Path:new(full_path)
-            if path:exists() then
-              path:rm()
-              vim.notify('🗑️ Deleted: ' .. full_path)
-            else
-              vim.notify('❌ File not found: ' .. full_path, vim.log.levels.ERROR)
-            end
-          end)
-          return true
+        confirm = function(item)
+          local full_path = save_dir .. '/' .. item.value
+          local path = Path:new(full_path)
+          if path:exists() then
+            path:rm()
+            vim.notify('🗑️ Deleted: ' .. full_path)
+          else
+            vim.notify('❌ File not found: ' .. full_path, vim.log.levels.ERROR)
+          end
         end,
       }
     end, {})

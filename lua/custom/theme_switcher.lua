@@ -80,32 +80,12 @@ m.load_theme = function(theme)
 end
 
 m.pick_theme = function()
-  local ok, telescope = pcall(require, 'telescope')
-  if not ok then
-    vim.notify('Telescope not found!', vim.log.levels.ERROR)
-    return
-  end
-  local pickers = require 'telescope.pickers'
-  local finders = require 'telescope.finders'
-  local actions = require 'telescope.actions'
-  local action_state = require 'telescope.actions.state'
-  local conf = require('telescope.config').values
-
-  pickers
-    .new({}, {
-      prompt_title = 'Select Theme',
-      finder = finders.new_table { results = themes },
-      sorter = conf.generic_sorter {},
-      attach_mappings = function(prompt_bufnr, _)
-        actions.select_default:replace(function()
-          local selection = action_state.get_selected_entry()
-          actions.close(prompt_bufnr)
-          m.load_theme(selection[1])
-        end)
-        return true
-      end,
-    })
-    :find()
+  require('snacks').picker.select(themes, {
+    prompt = 'Select Theme',
+    confirm = function(item)
+      m.load_theme(item)
+    end,
+  })
 end
 
 return m

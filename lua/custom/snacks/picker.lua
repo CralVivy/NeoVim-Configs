@@ -104,5 +104,90 @@ return {
       end,
       desc = 'Git Log File',
     },
+    -- Search mappings (Migrated from Telescope)
+    {
+      '<leader>sh',
+      function()
+        Snacks.picker.help_tags()
+      end,
+      desc = 'Search Help',
+    },
+    {
+      '<leader>sk',
+      function()
+        Snacks.picker.keymaps()
+      end,
+      desc = 'Search Keymaps',
+    },
+    {
+      '<leader>sf',
+      function()
+        Snacks.picker.files()
+      end,
+      desc = 'Search Files',
+    },
+    {
+      '<leader>sw',
+      function()
+        Snacks.picker.grep_word()
+      end,
+      desc = 'Search current Word',
+    },
+    {
+      '<leader>sg',
+      function()
+        Snacks.picker.grep()
+      end,
+      desc = 'Search by Grep',
+    },
+    {
+      '<leader>sd',
+      function()
+        Snacks.picker.diagnostics()
+      end,
+      desc = 'Search Diagnostics',
+    },
+    {
+      '<leader>sr',
+      function()
+        Snacks.picker.resume()
+      end,
+      desc = 'Search Resume',
+    },
+    {
+      '<leader>s.',
+      function()
+        Snacks.picker.recent()
+      end,
+      desc = 'Search Recent Files',
+    },
+    {
+      '<leader><leader>',
+      function()
+        Snacks.picker.buffers()
+      end,
+      desc = 'Find existing buffers',
+    },
+    {
+      '<leader>/',
+      function()
+        Snacks.picker.lines()
+      end,
+      desc = 'Fuzzily search in current buffer',
+    },
+    {
+      '<leader>s/',
+      function()
+        Snacks.picker.grep({ open_files = true })
+      end,
+      desc = 'Search in Open Files',
+    },
+    {
+      '<leader>sn',
+      function()
+        Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
+      end,
+      desc = 'Search Neovim files',
+    },
   },
 }
