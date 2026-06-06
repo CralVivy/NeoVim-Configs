@@ -1,74 +1,77 @@
 # CedarVim
 
-A modular Neovim configuration evolved from Kickstart.nvim, optimized for performance through the integration of Rust-based plugins and a strict separation of concerns.
+**A high-performance, modular Neovim configuration evolved from Kickstart.nvim.**
+
+CedarVim is engineered for speed and stability, utilizing a "Unification" strategy to reduce cognitive load and system overhead. By replacing legacy Lua implementations with Rust-powered alternatives and maintaining a strict separation of concerns, it provides a lean, professional development environment.
 
 ---
 
 ## 🛠 Technical Stack
 
-### Navigation & Search
-- **Snacks.nvim**: Acts as the primary engine for all picking and searching. Replaces Telescope for file finding, grep, buffer management, and LSP navigation to reduce memory overhead and increase response speed.
-- **Workspaces.nvim**: Provides rapid project switching and directory management.
+### ⚡ Performance & Navigation
+| Component | Tool | Purpose |
+| :--- | :--- | :--- |
+| **Fuzzy Finder** | `snacks.nvim` | Unified engine for files, grep, buffers, and LSP navigation. |
+| **Completion** | `blink.cmp` | Rust-based completion engine for near-zero latency. |
+| **Workspaces** | `workspaces.nvim` | Rapid project switching and directory management. |
 
-### Completion & Intelligence
-- **Blink.cmp**: A Rust-powered completion engine replacing `nvim-cmp` for lower latency.
-- **Copilot.lua**: Integrated via `blink.cmp` for AI-powered ghost-text suggestions.
-- **CodeCompanion**: Provides a dedicated interface for LLM-based chat, inline refactoring, and code reviews.
+### 🧠 Intelligence & LSP
+- **LSP Management**: `mason.nvim` & `nvim-lspconfig` for standardized server orchestration.
+- **AI Integration**: `CodeCompanion` for LLM-based chat and inline refactoring.
+- **Copilot**: Integrated via `blink.cmp` for high-performance ghost-text suggestions.
+- **Java Specialization**: Deep integration with `jdtls` for enterprise Java development.
+- **Debugging**: Full DAP support for Java, Go, Python, Rust, and C/C++.
 
-### LSP & Development
-- **Mason.nvim**: Centralized management for LSP servers, linters, and formatters.
-- **nvim-lspconfig**: Standardized LSP configurations with optimized inlay hints.
-- **JDTLS**: Specialized integration for Java development, including import organization and variable extraction.
-- **nvim-dap**: Full Debug Adapter Protocol support for Java, Go, Python, Rust, and C/C++.
-
-### UI & Aesthetics
-- **Indent-blankline.nvim**: Provides scope-aware indentation highlighting.
-- **Pywal.nvim**: Dynamic colorscheme integration based on system colors.
-- **Custom Theme Switcher**: A persistence system that remembers and restores the chosen theme across sessions.
+### 🎨 Interface & UI
+- **Theme System**: Custom persistence layer with `pywal.nvim` for system-wide color harmony.
+- **Visual Scope**: `indent-blankline.nvim` for structural indentation highlighting.
+- **Status & UI**: `lualine.nvim` and `bufferline.nvim` for a clean, informative workspace.
 
 ---
 
 ## 📂 Configuration Structure
 
-The configuration is split between the core boot process and a modular custom directory:
+The configuration follows a modular architecture to ensure that the core boot process remains lightweight while allowing for extensive customization.
 
 ```text
 .
-├── init.lua                # Entry point, basic options, and plugin registry
+├── init.lua                # Entry point & plugin registry
 ├── lua/
 │   ├── custom/             # User-specific extensions
-│   │   ├── configs/        # Detailed plugin settings
-│   │   ├── plugins/        # Modular plugin specs
-│   │   ├── snacks/         # Unified picker configurations
+│   │   ├── configs/        # Plugin-specific configuration
+│   │   ├── plugins/        # Modular plugin specifications
+│   │   ├── snacks/         # Unified picker logic
 │   │   ├── ui/             # UI assets
 │   │   └── utils/          # Shared helper functions
-│   └── kickstart/          # Core Kickstart components
-└── doc/                    # Technical documentation
-    ├── keybinds.md         # Full mapping reference
-    ├── AUDIT-Rigorous.md   # Technical system analysis
-    └── walkthrough.md      # Change log and implementation history
+│   └── kickstart/          # Core base components
+└── doc/                    # Technical documentation (ignored by git)
 ```
 
 ---
 
-## 📦 Installation & Dependencies
+## 📦 Installation
 
 ### Requirements
 - **Neovim**: `v0.10.0+`
 - **Font**: [Nerd Font](https://www.nerdfonts.com/)
-- **External Tools**:
-  - `ripgrep` & `fd` (Search/Finding)
-  - `npm` (Linter/Tooling)
-  - `cargo` (Optional, for plugin builds)
+- **CLI Tools**: `ripgrep`, `fd`, `npm`, `cargo` (optional)
 
 ### Setup
-1. Clone this repository into `~/.config/nvim`.
-2. Launch Neovim; `lazy.nvim` will automatically install all plugins.
-3. Run `:Lazy update` to ensure all versions are current.
+1. **Clone the repository**:
+   ```bash
+   git clone <your-repo-url> ~/.config/nvim
+   ```
+2. **Launch Neovim**:
+   `lazy.nvim` will automatically install all plugins on the first run.
+3. **Update**:
+   Run `:Lazy update` to ensure all plugins are current.
 
 ---
 
 ## 📖 Documentation
 
-- **Keybindings**: See [doc/keybinds.md](doc/keybinds.md) for a complete list of shortcuts.
-- **Architecture**: See [doc/AUDIT-Rigorous.md](doc/AUDIT-Rigorous.md) for the technical audit and system logic.
+Detailed references are maintained in the `doc/` directory:
+
+- **[Keybindings Guide](doc/keybinds.md)**: Complete list of all shortcuts and mappings.
+- **[Technical Audit](doc/AUDIT-Rigorous.md)**: Deep-dive analysis of the system architecture.
+- **[Implementation Walkthrough](doc/walkthrough.md)**: History of optimizations and changes.
