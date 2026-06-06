@@ -1,192 +1,135 @@
-local Snacks = require 'snacks'
-
 return {
-  'folke/snacks.nvim', -- Corrected plugin name
+  'folke/snacks.nvim',
   ---@type snacks.Config
   opts = {
     picker = {
       enabled = true,
-      -- Any other picker-specific options go here (not keys)
     },
-    -- Other top-level snacks.nvim options if any
   },
-  -- The 'keys' table should be at the top level of the plugin definition
   keys = {
     {
       '<leader>fb',
-      function()
-        Snacks.picker.buffers()
-      end,
+      function() require('snacks').picker.buffers() end,
       desc = 'Buffers',
     },
     {
       '<leader>fc',
-      function()
-        Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
-      end,
+      function() require('snacks').picker.files { cwd = vim.fn.stdpath 'config' } end,
       desc = 'Find Config File',
     },
     {
       '<leader>ff',
-      function()
-        Snacks.picker.files()
-      end,
+      function() require('snacks').picker.files() end,
       desc = 'Find Files',
     },
     {
       '<leader>fg',
-      function()
-        Snacks.picker.git_files()
-      end,
+      function() require('snacks').picker.git_files() end,
       desc = 'Find Git Files',
     },
     {
       '<leader>fp',
-      function()
-        Snacks.picker.projects()
-      end,
+      function() require('snacks').picker.projects() end,
       desc = 'Projects',
     },
     {
       '<leader>fr',
-      function()
-        Snacks.picker.recent()
-      end,
+      function() require('snacks').picker.recent() end,
       desc = 'Recent',
     },
-    -- git
     {
       '<leader>gb',
-      function()
-        Snacks.picker.git_branches()
-      end,
+      function() require('snacks').picker.git_branches() end,
       desc = 'Git Branches',
     },
     {
       '<leader>gl',
-      function()
-        Snacks.picker.git_log()
-      end,
+      function() require('snacks').picker.git_log() end,
       desc = 'Git Log',
     },
     {
       '<leader>gL',
-      function()
-        Snacks.picker.git_log_line()
-      end,
+      function() require('snacks').picker.git_log_line() end,
       desc = 'Git Log Line',
     },
     {
       '<leader>gs',
-      function()
-        Snacks.picker.git_status()
-      end,
+      function() require('snacks').picker.git_status() end,
       desc = 'Git Status',
     },
     {
       '<leader>gS',
-      function()
-        Snacks.picker.git_stash()
-      end,
+      function() require('snacks').picker.git_stash() end,
       desc = 'Git Stash',
     },
     {
       '<leader>gd',
-      function()
-        Snacks.picker.git_diff()
-      end,
+      function() require('snacks').picker.git_diff() end,
       desc = 'Git Diff (Hunks)',
     },
     {
       '<leader>gf',
-      function()
-        Snacks.picker.git_log_file()
-      end,
+      function() require('snacks').picker.git_log_file() end,
       desc = 'Git Log File',
     },
-    -- Search mappings (Migrated from Telescope)
     {
       '<leader>sh',
-      function()
-        Snacks.picker.help_tags()
-      end,
+      function() require('snacks').picker.help_tags() end,
       desc = 'Search Help',
     },
     {
       '<leader>sk',
-      function()
-        Snacks.picker.keymaps()
-      end,
+      function() require('snacks').picker.keymaps() end,
       desc = 'Search Keymaps',
     },
     {
       '<leader>sf',
-      function()
-        Snacks.picker.files()
-      end,
+      function() require('snacks').picker.files() end,
       desc = 'Search Files',
     },
     {
       '<leader>sw',
-      function()
-        Snacks.picker.grep_word()
-      end,
+      function() require('snacks').picker.grep_word() end,
       desc = 'Search current Word',
     },
     {
       '<leader>sg',
-      function()
-        Snacks.picker.grep()
-      end,
+      function() require('snacks').picker.grep() end,
       desc = 'Search by Grep',
     },
     {
       '<leader>sd',
-      function()
-        Snacks.picker.diagnostics()
-      end,
+      function() require('snacks').picker.diagnostics() end,
       desc = 'Search Diagnostics',
     },
     {
       '<leader>sr',
-      function()
-        Snacks.picker.resume()
-      end,
+      function() require('snacks').picker.resume() end,
       desc = 'Search Resume',
     },
     {
       '<leader>s.',
-      function()
-        Snacks.picker.recent()
-      end,
+      function() require('snacks').picker.recent() end,
       desc = 'Search Recent Files',
     },
     {
       '<leader><leader>',
-      function()
-        Snacks.picker.buffers()
-      end,
+      function() require('snacks').picker.buffers() end,
       desc = 'Find existing buffers',
     },
     {
       '<leader>/',
-      function()
-        Snacks.picker.lines()
-      end,
+      function() require('snacks').picker.lines() end,
       desc = 'Fuzzily search in current buffer',
     },
     {
       '<leader>s/',
-      function()
-        Snacks.picker.grep({ open_files = true })
-      end,
+      function() require('snacks').picker.grep { open_files = true } end,
       desc = 'Search in Open Files',
     },
     {
       '<leader>sn',
-      function()
-        Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
-      end,
+      function() require('snacks').picker.files { cwd = vim.fn.stdpath 'config' } end,
       desc = 'Search Neovim files',
     },
   },

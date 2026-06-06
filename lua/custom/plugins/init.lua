@@ -28,13 +28,6 @@ return {
   },
 
   require 'custom.plugins.workspaces',
-
-  {
-    'github/copilot.vim',
-    config = function()
-      vim.cmd ':Copilot disable'
-    end,
-  },
   {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',

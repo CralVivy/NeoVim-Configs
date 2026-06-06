@@ -1,6 +1,6 @@
 local m = {}
 
-local theme_file = vim.fn.stdpath 'config' .. '/lua/custom/current_theme.lua'
+local theme_file = vim.fn.stdpath('config') .. '/lua/custom/current_theme.lua'
 
 local themes = {
   'catppuccin',
@@ -75,11 +75,11 @@ function m.load_last_theme()
   if mode == 'dynamic' then
     vim.cmd 'colorscheme pywal'
   elseif theme and theme ~= '' then
-    vim.cmd 'colorscheme ' .. theme
+    vim.cmd('colorscheme ' .. theme)
   else
     vim.cmd 'colorscheme default'
   end
-  
+
   restore_ui_defaults()
 end
 
@@ -89,7 +89,7 @@ m.load_theme = function(theme)
     mode = 'dynamic'
     vim.cmd 'colorscheme pywal'
   else
-    vim.cmd 'colorscheme ' .. theme
+    vim.cmd('colorscheme ' .. theme)
   end
 
   vim.notify('Loaded ' .. mode .. ' theme: ' .. theme, vim.log.levels.INFO, { title = 'Theme Switcher' })
@@ -105,10 +105,11 @@ m.pick_theme = function()
 
   require('snacks').picker.select(options, {
     prompt = 'Select Theme Mode',
-    confirm = function(item)
+  }, function(item)
+    if item then
       m.load_theme(item)
-    end,
-  })
+    end
+  end)
 end
 
 return m

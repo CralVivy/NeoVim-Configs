@@ -6,8 +6,8 @@ return {
       doc = {
         inline = false,
         float = true,
-        max_width = 20 or 80,
-        max_height = 10 or 50,
+        max_width = 80,
+        max_height = 50,
       },
     },
   },

@@ -1,7 +1,7 @@
 -- lua/custom/snacks/indent.lua
 return {
   {
-    'snacks.nvim',
+    'folke/snacks.nvim',
     opts = {
       indent = {
         enabled = false,
